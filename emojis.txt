@@ -20,3 +20,4 @@
 🌥 white_sun_behind_cloud                                
 🌦 white_sun_behind_cloud_with_rain                      
 🌤 white_sun_with_small_cloud  
+🌊 water_wave

@@ -24,7 +24,7 @@ def _ini_file_does_not_exist(path):
         return False
     return True
 
-def _get_useragent_info(config, path_to_ini_file, return_if_new_file_was_created = False):
+def _get_useragent_info(configs, path_to_ini_file, return_if_new_file_was_created = False):
     """Gets the information from the user agent ini file.
 
     Args:
@@ -35,13 +35,13 @@ def _get_useragent_info(config, path_to_ini_file, return_if_new_file_was_created
     Returns:
         bool/dict: dictionary containing the user agent info, otherwise true/false.
     """
-    
+
     # in case it's not created, make a file.
     created_new_ini_file = False
     if _ini_file_does_not_exist(path_to_ini_file):
         with open(path_to_ini_file, 'w') as configfile:
-            config['UserAgent'] = _get_default_ini_values()
-            config.write(configfile)
+            configs['UserAgent'] = _get_default_ini_values()
+            configs.write(configfile)
             created_new_ini_file = True
     
     # If we only want to see if we created a new file with default info or not.
@@ -49,8 +49,8 @@ def _get_useragent_info(config, path_to_ini_file, return_if_new_file_was_created
         return created_new_ini_file
     
     # Get the user agent information from this ini file.
-    config.read(path_to_ini_file)
-    user_agent = {'app_name' : config['UserAgent']['applicationname'], 'contact' : config['UserAgent']['contactinfo']}
+    configs.read(path_to_ini_file)
+    user_agent = {'app_name' : configs['UserAgent']['applicationname'], 'contact' : configs['UserAgent']['contactinfo']}
     return user_agent
 
 def check_if_user_agent_is_set(ctx):
@@ -125,3 +125,18 @@ def purge_user_agent(ctx):
         config.write(configfile)
         
     console.print(f"\n[green]PURGED[/green] user agent information locally.\n")
+
+@click.command()
+@click.pass_context
+def check_user_agent(ctx):
+    """Checks the current user agent information.
+    """
+    
+    user_agent = ctx.obj['user_agent']
+    console = ctx.obj['console']
+    contact = user_agent['contact'] 
+    
+    if contact == "NoneSet":
+        console.print("\n=> [magenta underline]You have not set this value.[/] Set it through [reverse]richwx set-user-agent \[contact]\n")
+    else:
+        console.print(f"\nContact Information for user agent: [magenta]{contact}\n")
