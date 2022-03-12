@@ -1,9 +1,16 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 
-entry_points = {
-        'console_scripts': ['richwx = path.to.module:function_name']
-},
-
-setup(name = 'richwx',
-      entry_points = entry_points,
+setup(
+        name = 'richwx',
+        packages = find_packages(),
+        entry_points = {
+                'console_scripts': [
+                'richwx = cli.cli:cli', # cli_folder.cli_file:cli_function
+                ],
+        },
+        install_requires = [
+                'Click',
+                'rich',
+                'nwsapy'
+        ]
      )
