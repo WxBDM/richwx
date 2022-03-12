@@ -3,7 +3,7 @@ import configparser
 from rich.console import Console
 import os
 
-from .commands import get_alert_by_state as alert_by_state
+from .alerts import get_alerts
 from .useragent import set_user_agent, purge_user_agent, _get_useragent_info
 
 # This is the common entry point, and is called when you type richwx into the console.
@@ -25,7 +25,7 @@ def cli(ctx):
                 }
     
 # Add the commands here.
-cli.add_command(alert_by_state)
+cli.add_command(get_alerts)
 cli.add_command(set_user_agent)
 cli.add_command(purge_user_agent)
 

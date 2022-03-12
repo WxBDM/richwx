@@ -3,10 +3,23 @@ import click
 import os
 
 def _get_default_ini_values():
+    """Returns default ini file values.
+
+    Returns:
+        dict: Information for default user agent ini files.
+    """
     return {'applicationname' : 'RichWxTerminal',
             'contactinfo' : 'NoneSet'}
 
 def _ini_file_does_not_exist(path):
+    """Determines if the ini file does NOT exist.
+
+    Args:
+        path (string): The path to the ini file.
+
+    Returns:
+        bool: True if the file does exist, false otherwise.
+    """
     if os.path.isfile(path):
         return False
     return True
@@ -39,6 +52,22 @@ def _get_useragent_info(config, path_to_ini_file, return_if_new_file_was_created
     config.read(path_to_ini_file)
     user_agent = {'app_name' : config['UserAgent']['applicationname'], 'contact' : config['UserAgent']['contactinfo']}
     return user_agent
+
+def check_if_user_agent_is_set(ctx):
+    """Determines if the user agent is set. If not, then it will not show anything on the console.
+
+    Args:
+        config (configparser.ConfigParser): Used for parsing the ini file.
+        path (str): Path to the ini file.
+        rich_console (rich.console.Console): The rich console to print an alert.
+    """
+    config = ctx.obj['config']
+    path = ctx.obj['path_to_ini_file']
+    rich_console = ctx.obj['console']
+    
+    user_agent_info = _get_useragent_info(config, path)
+    if user_agent_info['contact'] == "NoneSet":
+        rich_console.print("=> [bold red]Attention:[/bold red] User Agent is not set. Be sure to set it running [underline]`richwx set-user-agent`[/underline].")
 
 @click.command()
 @click.argument('contact', required = True, nargs = -1, type = str)
