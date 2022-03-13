@@ -21,3 +21,9 @@
 🌦 white_sun_behind_cloud_with_rain                      
 🌤 white_sun_with_small_cloud  
 🌊 water_wave
+🔥 fire
+🌀 cyclone
+🚩 triangular_flag
+👀 eyes 
+❗ exclamation_mark 
+🥶 cold_face 
