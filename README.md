@@ -1,7 +1,7 @@
 # RichWx
 A CLI tool to display weather alerts in the terminal using the Rich library. This is a for fun python package that leverages Rich and NWSAPy to display weather information in your terminal. Here's an example of when `richwx alerts TX` is ran:
 
-![example alert](example.png)
+![example alert](images/example.png)
 
 To install, it is recommended to create a virtual environment:
 
@@ -37,6 +37,13 @@ Using RichWx
 ------------
 Type ``richwx --help`` to pull up a help menu. At any point, you can pull up a help menu
 by appending ``--help`` to the end of the command.
+
+The only functionality that is implemented is alerts by state. That is: `richwx alerts [state]`. If you input an invalid 2 letter state abbreviation, you will recieve an error:
+
+![invalid input 1](images/invalid_2_letters.png)
+
+Similarily, an invalid state will throw an error:
+![invalid input 2](images/invalid_state.png)
 
 Developers Note
 ---------------

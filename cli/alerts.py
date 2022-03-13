@@ -3,6 +3,7 @@ import time
 from rich.progress import Progress
 from rich.table import Table
 from nwsapy import api_connector
+from nwsapy.services.validation import valid_areas
 from datetime import datetime
 from .useragent import check_if_user_agent_is_set
     
@@ -46,8 +47,16 @@ def get_alerts(ctx, state):
         # Add a new task bar.
         task = progress.add_task('Validating input...', total = n_steps)
         if len(state) != 2:
-            console.print("=> [red bold]Attention:[/] You must have the state in its 2 letter abbreviation (ex: FL, MA, etc).\n")
+            console.print("\n=> [red bold]Attention:[/] You must have the state in its 2 letter abbreviation (ex: FL, MA, etc).\n")
+            progress.update(task, advance = steps_taken, description = f"Unsuccessful data validation. See error above.")
             return
+        
+        state = state.upper()
+        if state not in valid_areas():
+            console.print(f"\n=> [red bold]Attention:[/] {state} is not a valid state.\n")
+            progress.update(task, advance = steps_taken, description = f"Unsuccessful data validation. See error above.")
+            return
+        
         steps_taken += 1
         
         # validation happened, checking user agent.
@@ -72,7 +81,7 @@ def get_alerts(ctx, state):
         
         for key_number in data.keys():
             counties = data[key_number]['areaDesc'].replace(';', ',')
-            table.add_row(make_emoji_string(data[key_number]['event']), counties, str(data[key_number]['sent']), str(data[key_number]['expires']), data[key_number]['sender_name'])
+            table.add_row(make_emoji_string(data[key_number]['event']), counties, f"[magenta]{str(data[key_number]['sent'])}", f"[yellow]{str(data[key_number]['expires'])}", data[key_number]['sender_name'])
         steps_taken += 1
     
         progress.update(task, advance = steps_taken, description = f"Completed!")
