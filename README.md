@@ -1,5 +1,7 @@
 # RichWx
-A CLI tool to display weather alerts in the terminal using the Rich library. This is a for fun python package that leverages Rich and NWSAPy to display weather information in your terminal.
+A CLI tool to display weather alerts in the terminal using the Rich library. This is a for fun python package that leverages Rich and NWSAPy to display weather information in your terminal. Here's an example of when `richwx alerts TX` is ran:
+
+![example alert](example.png)
 
 To install, it is recommended to create a virtual environment:
 
