@@ -1,6 +1,7 @@
 import re
 import click
 import os
+import sys
 
 def _get_default_ini_values():
     """Returns default ini file values.
@@ -68,21 +69,25 @@ def check_if_user_agent_is_set(ctx):
     user_agent_info = _get_useragent_info(config, path)
     if user_agent_info['contact'] == "NoneSet":
         rich_console.print("=> [bold red]Attention:[/bold red] User Agent is not set. Be sure to set it running [underline]`richwx set-user-agent`[/underline].")
+        sys.exit()
 
-@click.command()
+@click.group(name = "auth")
+def user_agent_info():
+    """Sets metadata for NWS API maintainers.
+    
+    This is required by the maintainers as a form of contacting you in the event of a security event. 
+    Outside of the header information that is sent to the API, this data is saved locally in a file.
+    To purge this information, use `richwx auth purge`.
+    
+    See more details here: https://www.weather.gov/documentation/services-web-api"""
+    pass
+
+
+@user_agent_info.command('set')
 @click.argument('contact', required = True, nargs = -1, type = str)
 @click.pass_context
 def set_user_agent(ctx, contact):
-    """Sets metadata required by the NWS API.
-    This application does NOT transmit this information except to the API.
-    When setting the application name and contact, be sure it is something
-    that you are okay with releasing publicly in the event of a security breach.
-    
-    There is functionality to clear this set information by running
-    `richwx clear-user-agent`. This resets the information to defaults.
-    
-    => `contact` should be a website or email; it's a way to for the
-    maintainers to contact you in the event of a security breach.
+    """Sets metadata to be sent to the NWS API.
     """
     
     if isinstance(contact, tuple):
@@ -109,15 +114,15 @@ def set_user_agent(ctx, contact):
     console.print(f"\nUser agent contact info now set to: [blue]{contact}[/blue]")
     console.print(f"\tReminder: Only the NWS API maintainers will see this information!\n")
 
-@click.command()
-@click.pass_context
-def purge_user_agent(ctx):
-    """Purges the user agent information locally.
+@user_agent_info.command(name = 'purge')
+@click.pass_obj
+def purge_user_agent(obj):
+    """Purges the metadata information locally.
     """
     
-    config = ctx.obj['config']
-    path_to_ini = ctx.obj['path_to_ini_file']
-    console = ctx.obj['console']
+    config = obj['config']
+    path_to_ini = obj['path_to_ini_file']
+    console = obj['console']
     
     config.read(path_to_ini)
     config['UserAgent'] = _get_default_ini_values()
@@ -126,14 +131,15 @@ def purge_user_agent(ctx):
         
     console.print(f"\n[green]PURGED[/green] user agent information locally.\n")
 
-@click.command()
-@click.pass_context
-def check_user_agent(ctx):
+@user_agent_info.command('check')
+@click.pass_obj
+def check_user_agent(obj):
     """Checks the current user agent information.
     """
     
-    user_agent = ctx.obj['user_agent']
-    console = ctx.obj['console']
+    user_agent = obj['user_agent']
+    console = obj['console']
+    
     contact = user_agent['contact'] 
     
     if contact == "NoneSet":
