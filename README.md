@@ -33,20 +33,28 @@ You can set the value: `richwx set-user-agent [contact]`, where [contact] is you
 
 If you wish to purge this information: `richwx purge-user-agent`. This will reset the values to their default.
 
-Using RichWx
-------------
+## Using RichWx
+At any point, you can type `--help` to get additional information about the specific command.
+
+### Alerts by State
+The Alerts leverage the `/alerts` endpoint within the API. Simply
+
 Type ``richwx --help`` to pull up a help menu. At any point, you can pull up a help menu
 by appending ``--help`` to the end of the command.
 
-The only functionality that is implemented is alerts by state. That is: `richwx alerts [state]`. If you input an invalid 2 letter state abbreviation, you will recieve an error:
+The only functionality that is implemented is alerts by state. That is: `richwx alerts state [state]`. You can input the full name of the state or the 2 letter abbreviation.
 
-![invalid input 1](images/invalid_2_letters.png)
+By adding the flag `--show-id`, it will add another column to the output. This will show a bunch of seemily random numbers and letters. However, this is necessary to be able to look at individual details of a specific alert.
 
-Similarily, an invalid state will throw an error:
-![invalid input 2](images/invalid_state.png)
+### Alerts by ID
+If you get the alerts by ID (i.e. `richwx alerts id [id]`), you'll be able to pull up specific information about the alert:
+
+![example individual alert](images/individual_alert.png)
 
 Developers Note
 ---------------
-That's it. That's the documentation. If you have questions, reach out to me. I don't plan on maintaining this package outside of the weekend I threw this together, but if there's enough community support and features folks want to see, then I'd be happy to further develop thE package.
+That's it. That's the documentation. If you have questions, reach out to me. I don't plan on maintaining this package outside of the weekend I threw this together, but if there's enough community support and features folks want to see, then I'd be happy to further develop the package.
+
+I do also allow others to contribute to this package and make suggestions. If you would like to make a suggestion, please do not open an issue, but rather post in the [ideas discussion board](https://github.com/WxBDM/richwx/discussions/categories/ideas) on GitHub.
 
 

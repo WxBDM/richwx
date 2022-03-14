@@ -1,0 +1,12 @@
+Changelog for RichWx
+
+v0.0.2 (Sunday March 14)
+- Refactored baseline functionality to be more distinct with what kind of alerts the user is fetching
+- Added `richwx alerts id`
+- Relabeled user-agent stuff to `auth` (i.e. `richwx user-agent` to `richwx auth ...`)
+- Under auth, added `set`, `purge`, `check`
+
+v0.0.1 (Saturday, March 12)
+Initial release of richwx
+- Packaged on PyPi
+- Functionality: `richwx alerts [state]`
