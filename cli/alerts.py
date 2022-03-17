@@ -7,7 +7,7 @@ from nwsapy.services.validation import valid_areas
 from nwsapy.core.mapping import full_state_to_two_letter_abbreviation as fsta
 from nwsapy.core.errors import DataValidationError
 from datetime import datetime
-from .useragent import check_if_user_agent_is_set
+# needs to get fixed: from cli.useragent import check_if_user_agent_is_set
 
 class AlertStyling:
     """Class to style alerts, allows for modularity."""
@@ -27,13 +27,6 @@ class AlertStyling:
         
         string = ''
         
-        if len(self.emojis) != 0:
-            for emote in self.emojis:
-                string += f"{emote} "
-            
-            if self.newline:
-                string += "\n"
-        
         # i.e. [blue bold italics underline]
         opening_style_tag = f'[{self.color}'
         if self.is_bolded:
@@ -45,6 +38,13 @@ class AlertStyling:
         opening_style_tag += ']'
         
         string += f"{opening_style_tag}{self.event}[/]"
+        
+        if self.newline:
+            string += "\n"
+        
+        if len(self.emojis) != 0:
+            for emote in self.emojis:
+                string += f"{emote} "
                 
         return string
     
@@ -155,7 +155,7 @@ def get_rich_style_string(nws_warning, bolded = False, italics = False, underlin
         'Red Flag Warning': AlertStyling("Red Flag Warning", "bright_magenta", [":triangular_flag:"]), 
         'Rip Current Statement': AlertStyling("Rip Current Statement", "medium_turquoise", [":water_wave:"]), 
         'Severe Thunderstorm Watch': AlertStyling("Severe Thunderstorm Watch", "yellow", [":eyes:", ":zap:"]),
-        'Severe Thunderstorm Warning': AlertStyling("Severe Thunderstorm Warning", "yellow", [":exclamation_mark:", ":zap:"]), 
+        'Severe Thunderstorm Warning': AlertStyling("Severe Thunderstorm Warning", "bright_yellow", [":exclamation_mark:", ":zap:"], bolded = True), 
         'Severe Weather Statement': AlertStyling("Severe Weather Statement", "bright_white", [":question:", ":question:"]), 
         'Shelter In Place Warning': AlertStyling("Shelter In Place Warning", "bright_white", [":question:", ":question:"]), 
         'Short Term Forecast': AlertStyling("Short Term Forecast", "bright_white", [":question:", ":question:"]), 
@@ -172,7 +172,7 @@ def get_rich_style_string(nws_warning, bolded = False, italics = False, underlin
         'Storm Surge Watch': AlertStyling("Storm Surge Watch", "bright_white", [":question:", ":question:"]),
         'Storm Watch': AlertStyling("Storm Watch", "bright_white", [":question:", ":question:"]),
         'Test': AlertStyling("Test", "bright_white", [":question:", ":question:"]), 
-        'Tornado Warning': AlertStyling("Tornado Warning", "red", [":exclamation_mark:", ":tornado:"]),
+        'Tornado Warning': AlertStyling("Tornado Warning", "red", [":exclamation_mark:", ":tornado:"], bolded = True),
         'Tornado Watch': AlertStyling("Tornado Watch", "red", [":eyes:", ":tornado:"]), 
         'Tropical Depression Local Statement': AlertStyling("Tropical Depression Local Statement", "bright_white", [":question:", ":question:"]), 
         'Tropical Storm Local Statement': AlertStyling("Tropical Storm Local Statement", "bright_white", [":question:", ":question:"]), 
@@ -254,9 +254,10 @@ def get_alerts(ctx, state, show_id):
         
         # validation happened, checking user agent.
         progress.update(task, advance = steps_taken, description = 'Checking User Agent...')
-        check_if_user_agent_is_set(ctx)
+        check_if_user_agent_is_set(ctx.obj)
         user_agent = ctx.obj['user_agent']
         api_connector.set_user_agent(user_agent['app_name'], user_agent['contact'])
+        
         steps_taken += 1
         
         # User agent OK and set. Fetch the data.
@@ -315,7 +316,7 @@ def get_alerts(ctx, state, show_id):
 def alert_id(ctx, id):
     """Displays an alert information by its ID."""
     
-    check_if_user_agent_is_set(ctx)
+    check_if_user_agent_is_set(ctx.obj)
 
     id = f'urn:oid:2.49.0.1.840.0.{id}'
 
@@ -327,14 +328,20 @@ def alert_id(ctx, id):
     
     style = get_rich_style_string(data['event'])
     
-    table = Table(show_lines=True, title = style.event_with_emotes, padding = (1, 1), style = style.color, width = 130)
+    style_table = None
+    if data['severity'] == 'Extreme':
+        from rich.style import Style
+        style_table = Style(bold = True)
+    
+    table = Table(show_lines=True, title = style.event_with_emotes, padding = (0, 0), style = style.color, width = 130, border_style = style_table)
     table.add_column("Information")
     table.add_column("Details")
     
-    table.add_row("Sender", data['senderName'])
     table.add_row("Headline", data['headline'])
     table.add_row("Details", data['description'])
     table.add_row("Location", data['areaDesc'])
+    table.add_row("Instruction", data['instruction'])
+    table.add_row("Sender", data['senderName'])
     table.add_row("Severity", data['severity'])
     table.add_row("Full ID", id)
     
@@ -344,5 +351,5 @@ def alert_id(ctx, id):
         
     # ['@id', '@type', 'id', 'areaDesc', 'geocode', 'affectedZones', 'references', 'sent', 'effective', 'onset', 'expires', 
     # 'ends', 'status', 'messageType', 'category', 'severity', 'certainty', 'urgency', 'event', 'sender', 'senderName', 
-    # 'headline', 'description', 'instruction', 'response', 'parameters', 'points', 'polygon', 'sent_utc', 'effective_utc', 
+    # 'headline', 'description', 'instruction', 'response', 'parameters', 'points', 'polygon', 'sent_utc', 'effective_utc',  
     # 'onset_utc', 'expires_utc', 'ends_utc', 'affected_zones', 'area_desc', 'message_type', 'sender_name']
