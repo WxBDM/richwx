@@ -1,13 +1,14 @@
 import click
-import configparser
 from rich.console import Console
 import os
 import sys
 sys.path.insert(0, os.path.abspath(".")) # guarentees that the path of this is added. Please work.
 
-from cli.alerts import alerts
-from cli.intro import intro
-from cli.useragent import user_agent_group, UserAgentHandler
+from cli.utils.handlers import UserAgentHandler
+
+from cli.commands.alerts import alerts
+from cli.commands.intro import intro
+from cli.commands.useragent import user_agent_group
 
 # This is the common entry point, and is called when you type richwx into the console.
 @click.group()

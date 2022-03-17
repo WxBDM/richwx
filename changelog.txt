@@ -1,12 +1,19 @@
 Changelog for RichWx
 
+v0.0.3 (Unknown ETA)
+- Refactored useragent.py API to have a class to handle all `configparser`-related operations. This reduces complexity of code. Horray!
+- Moved emote files around in the repo. They needed a better home.
+- Updated README to better reflect the current CLI with more up-to-date examples.
+- Removed a secondary progress bar for populating tables.
+- Added periods to the end of changelog sentences.
+
 v0.0.2 (Sunday March 14)
-- Refactored baseline functionality to be more distinct with what kind of alerts the user is fetching
-- Added `richwx alerts id`
-- Relabeled user-agent stuff to `auth` (i.e. `richwx user-agent` to `richwx auth ...`)
-- Under auth, added `set`, `purge`, `check`
+- Refactored baseline functionality to be more distinct with what kind of alerts the user is fetching.
+- Added `richwx alerts id`.
+- Relabeled user-agent stuff to `auth` (i.e. `richwx user-agent` to `richwx auth ...`).
+- Under auth, added `set`, `purge`, `check`.
 
 v0.0.1 (Saturday, March 12)
-Initial release of richwx
-- Packaged on PyPi
-- Functionality: `richwx alerts [state]`
+Initial release of richwx!
+- Packaged on PyPi.
+- Functionality: `richwx alerts [state]`.
