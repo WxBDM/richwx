@@ -5,7 +5,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
-version = '0.0.2'
+version = '0.0.3'
 
 setup(
         name = 'richwx',
