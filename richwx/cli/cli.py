@@ -2,7 +2,7 @@ import click
 from rich.console import Console
 import os
 import sys
-sys.path.insert(0, os.path.abspath(".")) # guarentees that the path of this is added. Please work.
+sys.path.insert(0, os.path.join(os.path.abspath("."), 'richwx')) # guarentees that the path of this is added. Please work.
 
 from cli.utils.handlers import UserAgentHandler
 
@@ -20,6 +20,17 @@ def cli(ctx):
     ctx.obj = {'console' : Console(),
                 'user_agent' : UserAgentHandler(),
               }
+
+# Used for debugging purposes.
+@cli.command('path', hidden = True)
+@click.pass_obj
+def path(obj):
+    console = obj['console']
+    for path in sys.path:
+        if 'rich' in path:
+            console.print(f"[blue]=>\t{path}")
+        else:
+            console.print(f"[white]\t{path}")
 
 # Add the commands here.
 cli.add_command(intro)

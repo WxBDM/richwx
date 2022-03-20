@@ -5,7 +5,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
-version = '0.0.3'
+version = '0.0.3-b'
 
 setup(
         name = 'richwx',
@@ -14,7 +14,7 @@ setup(
         license='apache-2.0',
         entry_points = {
                 'console_scripts': [
-                'richwx = cli.cli:cli', # cli_folder.cli_file:cli_function
+                'richwx = richwx.cli.cli:cli', # richwx_folder.cli_folder.cli_file:cli_function
                 ],
         },
         install_requires = [
