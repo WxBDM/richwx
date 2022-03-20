@@ -1,6 +1,10 @@
 Changelog for RichWx
 
-v0.0.3 (Unknown ETA)
+v0.0.3-b (Sunday March 20, 2022)
+- Fixed an issue where the package didn't do package things and caused the version to be messed up.
+- Refactored entire package into its own folder within the repo for the purposes of keeping site_packages clean.
+
+v0.0.3 (Sunday March 20, 2022)
 - Refactored code for `auth` command.
 - Moved emote files around in the repo. They needed a better home.
 - Updated README to better reflect the current CLI with more up-to-date examples.

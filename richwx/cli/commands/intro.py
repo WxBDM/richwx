@@ -13,8 +13,7 @@ def intro(ctx):
 [blue]RichWx[/][/] :wind_blowing_face: :sun_behind_rain_cloud: :thermometer:'
     
     content = "\nThis package utilizes Rich, NWSAPy, and Click to provide a way to get \
-National Weather Service data through the CLI!\n\nThis is designed to be a for fun project. There are no plans \
-on developing this further, but if there's enough community support, it will be considered.\n"
+National Weather Service data through the CLI!\n"
 
     console.rule(title)
     console.print(content)
