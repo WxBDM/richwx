@@ -55,8 +55,6 @@ def get_alerts(obj, state, show_id):
         # validation happened, checking user agent.
         progress.update(task, advance = steps_taken, description = 'Checking User Agent...')
         user_agent = obj['user_agent']
-        if not user_agent.contact_is_set:
-            console.print(user_agent.error_message)
         api_connector.set_user_agent(user_agent.app_name, user_agent.contact)
         
         steps_taken += 1
@@ -102,9 +100,16 @@ def get_alerts(obj, state, show_id):
         progress.update(task, advance = steps_taken, description = f"Completed process!")
     
     # need 2 additional print statements here because the bar inteferes with it.
-    console.print()
-    console.print()
-    console.print(table)
+    if table.row_count == 0:
+        console.print(f"\n=> There are [underline green]0[/] alerts for {state}.\n")
+    else:
+        console.print()
+        console.print(table)
+        console.print(f"\n=> There are [underline green]{table.row_count}[/] alerts for {state}.\n")
+    
+    # Let the user know at the bottom that their contact information has not been set.
+    if not user_agent.contact_is_set:
+        console.print(user_agent.error_message)
 
 
 @alerts.command('id')

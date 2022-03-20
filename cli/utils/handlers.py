@@ -19,35 +19,37 @@ class UserAgentHandler:
         # Security concern: don't keep these values internal to the class. Just call the
         # _read method every time. Makes things easier :^)
     
-    def _read(self):
+    def _read(self) -> tuple:
         self.info.read(self.PATH_TO_FILE)
         return (self.info['UserAgent']['applicationname'], self.info['UserAgent']['contactinfo'])
     
-    def _file_exists(self):
+    def _file_exists(self) -> bool:
         if os.path.isfile(self.PATH_TO_FILE):
             return True
         return False
     
     @property
-    def contact(self):
+    def contact(self) -> str:
         return self._read()[1]
 
     @property
-    def app_name(self):
+    def app_name(self) -> str:
         return self._read()[0]
     
     @property
     def error_message(self) -> str:
-        return "=> [red bold]Attention[/]: you have not set the contact information for this application. "\
-            "The contact information can be set using [reversed]richwx auth set[/], and will [underline bold]only[/] "\
-            "be seen by the API maintainers."
+        return "\n=> [red bold]Attention[/]: you have not set the contact information for this application. "\
+"The contact information can be set using [reverse]richwx auth set[/], and will [underline bold]only[/] "\
+"be seen by the API maintainers. This can be an email or a website. See https://www.weather.gov/documentation/services-web-api for "\
+"more information.\n"
     
+    @property
     def contact_is_set(self) -> bool:
         if self.contact == 'NoneSet':
             return False
         return True
     
-    def set_contact(self, contact: str):
+    def set_contact(self, contact: str) -> None:
         if not isinstance(contact, str):
             print("When setting this information, you must pass in a string. Not setting.")
             return
@@ -60,7 +62,7 @@ class UserAgentHandler:
             self.info['UserAgent']['contactinfo'] = contact
             self.info.write(configfile)
     
-    def set_default_values(self):
+    def set_default_values(self) -> None:
         with open(self.PATH_TO_FILE, 'w') as configfile:
             self.info['UserAgent'] = self.default_values
             self.info.write(configfile)

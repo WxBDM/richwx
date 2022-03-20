@@ -1,10 +1,11 @@
 Changelog for RichWx
 
 v0.0.3 (Unknown ETA)
-- Refactored useragent.py API to have a class to handle all `configparser`-related operations. This reduces complexity of code. Horray!
+- Refactored code for `auth` command.
 - Moved emote files around in the repo. They needed a better home.
 - Updated README to better reflect the current CLI with more up-to-date examples.
-- Removed a secondary progress bar for populating tables.
+- Removed a secondary progress bar for populating tables with alerts.
+- Added emotes to some of the more common alerts.
 - Added periods to the end of changelog sentences.
 
 v0.0.2 (Sunday March 14)
